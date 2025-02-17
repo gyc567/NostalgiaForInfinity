@@ -206,7 +206,7 @@ Example_Test_Account_binance_futures-NostalgiaForInfinityX5  | 2024-11-25 23:30:
 ```
 
 ### Open your browser
-http://0.0.0.0:8080
+http://localhost:8080/graph
  system is up and running
 
 ---
