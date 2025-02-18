@@ -5,14 +5,14 @@
 # You can run this script regularly to update your data for new backteswting periods
 MAIN_DATA_DIRECTORY="user_data/data"
 # For manual running you can use these
-TIMEFRAME="5m"
+TIMEFRAME="1h"
 HELPER_TIME_FRAMES="1d 4h 1h 15m 1m"
 # EXAMPLE
 # TRADING_MODE="spot futures"
-TRADING_MODE="spot"
+TRADING_MODE="futures"
 # EXAMPLE
 # EXCHANGE="binance kucoin okx"
-EXCHANGE="binance kucoin"
+EXCHANGE="binance"
 URL="https://github.com/DigiTuccar/HistoricalDataForTradeBacktest.git"
 
 if [ -d $MAIN_DATA_DIRECTORY ]

@@ -22,7 +22,7 @@ class RSICrossoverTrendStrategy(IStrategy):
         "0": 1
     }
     
-    timeframe = '5m'                     # 使用5分钟K线
+    timeframe = '1h'                     # 使用1小时K线
     process_only_new_candles = True      # 只在新K线形成时处理
     startup_candle_count = 240           # 启动需要的K线数量
     
@@ -84,24 +84,42 @@ class RSICrossoverTrendStrategy(IStrategy):
 
         return None                       # 其他情况使用默认止损
 
+    # def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+    #     # 计算买入信号相关指标
+    #     dataframe['sma_15'] = ta.SMA(dataframe, timeperiod=15)  # 15周期简单移动平均
+    #     dataframe['cti'] = pta.cti(dataframe["close"], length=20)  # CTI指标
+    #     dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)  # 14周期RSI
+    #     dataframe['rsi_fast'] = ta.RSI(dataframe, timeperiod=4)  # 4周期快速RSI
+    #     dataframe['rsi_slow'] = ta.RSI(dataframe, timeperiod=20)  # 20周期慢速RSI
+
+    #     # 计算获利卖出相关指标
+    #     stoch_fast = ta.STOCHF(dataframe, 5, 3, 0, 3, 0)  # 随机快速指标
+    #     dataframe['fastk'] = stoch_fast['fastk']
+
+    #     dataframe['cci'] = ta.CCI(dataframe, timeperiod=20)  # CCI指标
+
+    #     # 计算移动平均线
+    #     dataframe['ma120'] = ta.MA(dataframe, timeperiod=120)  # 120周期MA
+    #     dataframe['ma240'] = ta.MA(dataframe, timeperiod=240)  # 240周期MA
+
+    #     return dataframe
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        # 计算买入信号相关指标
-        dataframe['sma_15'] = ta.SMA(dataframe, timeperiod=15)  # 15周期简单移动平均
-        dataframe['cti'] = pta.cti(dataframe["close"], length=20)  # CTI指标
-        dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)  # 14周期RSI
-        dataframe['rsi_fast'] = ta.RSI(dataframe, timeperiod=4)  # 4周期快速RSI
-        dataframe['rsi_slow'] = ta.RSI(dataframe, timeperiod=20)  # 20周期慢速RSI
-
-        # 计算获利卖出相关指标
-        stoch_fast = ta.STOCHF(dataframe, 5, 3, 0, 3, 0)  # 随机快速指标
-        dataframe['fastk'] = stoch_fast['fastk']
-
-        dataframe['cci'] = ta.CCI(dataframe, timeperiod=20)  # CCI指标
-
-        # 计算移动平均线
-        dataframe['ma120'] = ta.MA(dataframe, timeperiod=120)  # 120周期MA
-        dataframe['ma240'] = ta.MA(dataframe, timeperiod=240)  # 240周期MA
-
+        # 批量计算指标
+        indicators = {
+            'sma_15': ta.SMA(dataframe, timeperiod=15),
+            'cti': pta.cti(dataframe["close"], length=20),
+            'rsi': ta.RSI(dataframe, timeperiod=14),
+            'rsi_fast': ta.RSI(dataframe, timeperiod=4),
+            'rsi_slow': ta.RSI(dataframe, timeperiod=20),
+            'fastk': ta.STOCHF(dataframe, 5, 3, 0, 3, 0)['fastk'],
+            'cci': ta.CCI(dataframe, timeperiod=20),
+            'ma120': ta.MA(dataframe, timeperiod=120),
+            'ma240': ta.MA(dataframe, timeperiod=240)
+        }
+        
+        for key, value in indicators.items():
+            dataframe[key] = value
+        
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
