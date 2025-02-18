@@ -1,3 +1,5 @@
 {
-    "marscode.chatLanguage": "cn"
+    "marscode.chatLanguage": "cn",
+    "Lingma.cloudModelAutoTriggerGenerateLength": "long",
+    "Lingma.cloudModelManualTriggerGenerateLength": "long"
 }
