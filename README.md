@@ -354,6 +354,28 @@ However, if you plan on running additional backtest and run the test suite, you 
 There is a repo for this :
 https://github.com/DigiTuccar/HistoricalDataForTradeBacktest
 
+before run the script, you need to install jq
+```bash
+sudo apt-get install jq
+
+``` 
+# 1. 设置环境变量（根据你的交易需求调整）
+export EXCHANGE="binance"         # 交易所名称
+export TRADING_MODE="spot"        # 交易模式: spot/futures
+export TIMEFRAME="5m"             # 主时间框架
+export HELPER_TIME_FRAMES="15m 1h 4h 1d"  # 辅助时间框架
+
+# 2. 生成交易对白名单（自动读取配置文件）
+jq -r .exchange.pair_whitelist[] configs/pairlist-backtest-static-$EXCHANGE-$TRADING_MODE-usdt.json | \
+  sed -e 's+/+_+g' -e 's+:+_+g' > PAIRS_FOR_DOWNLOAD.txt
+
+# 3. 执行数据下载脚本（核心命令）
+chmod +x .github/workflows/scripts/download-necessary-exchange-market-data-for-backtests.sh
+./.github/workflows/scripts/download-necessary-exchange-market-data-for-backtests.sh
+# 4. 检查下载结果
+ls -lah data/raw/
+
+
 For fast downloading data from github repo run `tools/download-necessary-exchange-market-data-for-backtests.sh`
 
 ```bash
